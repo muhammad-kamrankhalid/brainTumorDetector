@@ -67,19 +67,23 @@ def load_model():
 class_names = ['glioma', 'meningioma', 'notumor', 'pituitary']
 
 # Function to preprocess image
+# Function to preprocess image
 def preprocess_image(uploaded_image):
     """Preprocess uploaded image for model prediction"""
     img = Image.open(uploaded_image)
     
-    # Convert to RGB if necessary
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
+    # Convert to Grayscale if model expects 1 channel
+    if img.mode != 'L':
+        img = img.convert('L')
     
     # Resize to model input size
     img = img.resize((224, 224))
     
     # Convert to array and normalize
     img_array = np.array(img) / 255.0
+    
+    # Add channel dimension for grayscale (224, 224, 1)
+    img_array = np.expand_dims(img_array, axis=-1)
     
     # Add batch dimension
     img_array = np.expand_dims(img_array, axis=0)
@@ -267,3 +271,4 @@ st.markdown("""
 
 if __name__ == "__main__":
     main()
+
