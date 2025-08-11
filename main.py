@@ -77,6 +77,7 @@ class_names = ['glioma', 'meningioma', 'notumor', 'pituitary']
 def preprocess_image(uploaded_image):
     """Preprocess uploaded image for model prediction (RGB)"""
     img = Image.open(uploaded_image)
+    img = tf.image.decode_image(file_contents, channels=3)  # force RGB
 
     # Ensure RGB format (model trained with RGB)
     if img.mode != 'RGB':
@@ -212,3 +213,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
